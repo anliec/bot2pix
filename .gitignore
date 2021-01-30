@@ -1,2 +1,12 @@
-*.log
-/test
+*
+
+!*.py
+!*.png
+!*.md
+!*.yaml
+!*.json
+!.gitignore
+
+!*/
+
+.idea/
