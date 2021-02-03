@@ -9,6 +9,8 @@ from PyQt5.QtCore import QPoint, QRect
 from PyQt5.QtGui import QColor
 from PyQt5.QtWidgets import QApplication
 from core import utils
+from core.ScaleComputer import ScaleComputer
+from core.ScaleManager import ScaleManager
 from gui import Overlay
 import core.env as env
 
@@ -38,24 +40,75 @@ def withTimeOut(fn):
 
 
 class Location(QPoint):
-    def __init__(self, x, y):
+    def __init__(self, x, y, scale: ScaleComputer, absolute_coordinate=False):
         super(Location, self).__init__(x, y)
+        self.base_scale = scale
+        self.base_rect = x, y
+        self.absolute_coordinate = absolute_coordinate
+        # register ourself so we can be scaled when needed
+        ScaleManager().register(self)
+
+    def rescale(self, new_scale: ScaleComputer):
+        x, y = new_scale.rescale(x=self.base_rect[0],
+                                 y=self.base_rect[1],
+                                 original_scale=self.base_scale,
+                                 just_scale=self.absolute_coordinate)
+        self.setX(x)
+        self.setY(y)
 
     def click(self):
         env.click(self.x(), self.y())
 
     def getpixel(self):
-        bi = env.capture(Region(self.x(), self.y(), 1, 1))
+        bi = env.capture(self)
         ni = cv2.cvtColor(bi, cv2.COLOR_RGB2BGR)
         return QColor(*bi[0, 0])
+
+    def width(self):
+        # To allow a Location to be given to env.capture
+        return 1
+
+    def height(self):
+        # To allow a Location to be given to env.capture
+        return 1
+
+    def getRect(self):
+        # To allow a Location to be given to env.capture
+        return self.x(), self.y(), 1, 1
 
 
 class Region(QRect):
 
-    def __init__(self, x, y, w, h):
+    def __init__(self, x, y, w, h, scale: ScaleComputer, absolute_coordinate=False):
+        """
+        :param x: x coordinate of the top left corner of the rectangle
+        :param y: y coordinate of the top left corner of the rectangle
+        :param w: width of the rectangle
+        :param h: height of the rectangle
+        :param scale: scale at which the coordinate are true
+        :param absolute_coordinate: True if the coordinate are relative to the top left corner and not the 4:3
+        central area (for the map coordinate for example)
+        """
         super(Region, self).__init__(x, y, w, h)
         self.bi = None
         self.stopWait = threading.Event()
+        self.base_scale = scale
+        self.base_rect = x, y, w, h
+        self.absolute_coordinate = absolute_coordinate
+        # register ourself so we can be scaled when needed
+        ScaleManager().register(self)
+
+    def rescale(self, new_scale: ScaleComputer):
+        x, y, w, h = new_scale.rescale_rect(x=self.base_rect[0],
+                                            y=self.base_rect[1],
+                                            w=self.base_rect[2],
+                                            h=self.base_rect[3],
+                                            original_scale=self.base_scale,
+                                            just_scale=self.absolute_coordinate)
+        self.setCoords(x, y, x + w, y + h)
+        if self.bi is not None:
+            # if we had a capture, update it to the new scale
+            self.capture(gray=not (len(self.bi.shape) == 3 and self.bi.shape[2] == 3))
 
     @withTimeOut
     def waitAppear(self, pattern, threshold=0.7):

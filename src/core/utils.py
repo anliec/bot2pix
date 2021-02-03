@@ -1,5 +1,6 @@
 import os
 import cv2
+import glob
 import numpy as np
 from numpy.ma import sqrt
 
@@ -40,9 +41,7 @@ def dhash(image, hashSize=8):
 
 
 def iterPatternsImg(patterns_dir, pattern_ext=".png"):
-    for filename in os.listdir(patterns_dir):
-        if filename.endswith(pattern_ext):
-           yield os.path.join(patterns_dir, filename), filename
+    yield from glob.iglob(os.path.join(patterns_dir, "*.{}".format(pattern_ext)))
 
 
 def loadPatternsFromDir(patterns_dir, pattern_ext=".png"):

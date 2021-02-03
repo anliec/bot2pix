@@ -34,7 +34,7 @@ class Walker(Bot):
                 return self.currPos
             if self.disconnected.wait(2):
                 self.connected.wait()
-        raise ParseMapCoordsFailed(f"Enable to parse map coords")
+        raise ParseMapCoordsFailed(f"Unable to parse map coords")
 
     def changeMap(self, direction, max_tries=3):
         nbr_fails = 0

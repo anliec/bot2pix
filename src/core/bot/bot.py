@@ -71,6 +71,8 @@ class Bot(threading.Thread):
     @staticmethod
     def parseMapCoords():
         image = env.capture(dofus.MAP_COORDS_R)
+        # cv2.imshow("coord", image)
+        # cv2.waitKey()
         gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
         low_bound = np.array([160, 60, 0])
         upper_bound = np.array([255, 255, 255])
@@ -84,7 +86,7 @@ class Bot(threading.Thread):
         result = cv2.blur(result, (7, 7))
         text = pytesseract.image_to_string(result, config='--psm 6')
 
-        print(text)
+        # print(text)
         res = re.findall("(-?\d+)", text)
         if res:
             return int(res[0]), int(res[1])

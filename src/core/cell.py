@@ -2,7 +2,7 @@ import sys
 from time import perf_counter
 from PyQt5.QtGui import QColor
 from PyQt5.QtWidgets import QApplication
-from core import dofus, env, Region
+from core import dofus, Region
 from core.utils import iterParallelogram
 from gui.Overlay import CellOverlay
 

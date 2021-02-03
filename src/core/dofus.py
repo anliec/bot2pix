@@ -3,42 +3,46 @@ import cv2
 from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QColor
 from core import Region, Location
+from core.ScaleComputer import ScaleComputer
 
-patterns_dir = r"C:\Users\khalid.majdoub\PycharmProjects\bot2pix\src\patterns"
+core_path = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
+patterns_dir = os.path.join(core_path, "patterns")
 
 
 def loadPattern(name):
     return cv2.imread(os.path.join(patterns_dir, name))
 
 
-RESIGN_POPUP_R = Region(698, 442, 533, 173)
-DEFEAT_POPUP_R = Region(762, 696, 415, 141)
-COMBAT_R = Region(335, 29, 1253, 885)
-MINIMAP_R = Region(62, 876, 190, 122)
-PM_R = Region(793, 993, 27, 34)
-PA_R = Region(729, 983, 55, 42)
-COMBAT_ENDED_POPUP_R = Region(841, 701, 244, 66)
-READY_R = Region(1312, 925, 145, 66)
-COMBAT_ENDED_POPUP_CLOSE_R = Region(1231, 721, 22, 18)
-MY_TURN_CHECK_R = Region(841, 1009, 17, 8)
-OUT_OF_COMBAT_R = Region(104, 749, 37, 37)
-CREATURE_MODE_R = Region(1339, 993, 27, 25)
-MAP_COORDS_R = Region(0, 28, 298, 98)
-CONNECT_R = Region(666, 88, 572, 531)
-RECONNECT_BUTTON_R = Region(880, 381, 161, 57)
-PLAY_GAME_BUTTON_R = Region(993, 652, 452, 260)
-BANK_MAN_R = Region(935, 465, 121, 126)
-BANK_MAN_TALK_R = Region(465, 601, 999, 236)
-INV_OPEN_R = Region(1213, 76, 413, 138)
-INV_FIRST_SLOT_R = Region(1249, 202, 67, 67)
-LVL_UP_INFO_R = Region(0, 438, 486, 388)
-SLOTS_R = Region(835, 920, 418, 86)
-HAVRE_SAC_ZAAP_R = Region(525, 380, 79, 54)
-ZAAP_CHOICES_R = Region(641, 268, 552, 461)
-CHAT_R = Region(352, 972, 320, 31)
-ZAAP_COORD_R = Region(1034, 295, 83, 394)
-FARM_R = Region(384,63,1158,815)
-ZAAP_SCROLL_BAR_END_L = Location(1269, 685)
+_default_scale = ScaleComputer(win_width=1920, win_height=1031, top_bar_decoration_offset=30)
+
+RESIGN_POPUP_R = Region(698, 442, 533, 173, _default_scale)
+DEFEAT_POPUP_R = Region(762, 696, 415, 141, _default_scale)
+COMBAT_R = Region(335, 29, 1253, 885, _default_scale)
+MINIMAP_R = Region(62, 876, 190, 122, _default_scale)
+PM_R = Region(793, 993, 27, 34, _default_scale)
+PA_R = Region(729, 983, 55, 42, _default_scale)
+COMBAT_ENDED_POPUP_R = Region(841, 701, 244, 66, _default_scale)
+READY_R = Region(1312, 925, 145, 66, _default_scale)
+COMBAT_ENDED_POPUP_CLOSE_R = Region(1231, 721, 22, 18, _default_scale)
+MY_TURN_CHECK_R = Region(841, 1009, 17, 8, _default_scale)
+OUT_OF_COMBAT_R = Region(104, 749, 37, 37, _default_scale)
+CREATURE_MODE_R = Region(1339, 993, 27, 25, _default_scale)
+MAP_COORDS_R = Region(0, 28, 298, 98, _default_scale, absolute_coordinate=True)
+CONNECT_R = Region(666, 88, 572, 531, _default_scale)
+RECONNECT_BUTTON_R = Region(880, 381, 161, 57, _default_scale)
+PLAY_GAME_BUTTON_R = Region(993, 652, 452, 260, _default_scale)
+BANK_MAN_R = Region(935, 465, 121, 126, _default_scale)
+BANK_MAN_TALK_R = Region(465, 601, 999, 236, _default_scale)
+INV_OPEN_R = Region(1213, 76, 413, 138, _default_scale)
+INV_FIRST_SLOT_R = Region(1249, 202, 67, 67, _default_scale)
+LVL_UP_INFO_R = Region(0, 438, 486, 388, _default_scale)
+SLOTS_R = Region(835, 920, 418, 86, _default_scale)
+HAVRE_SAC_ZAAP_R = Region(525, 380, 79, 54, _default_scale)
+ZAAP_CHOICES_R = Region(641, 268, 552, 461, _default_scale)
+CHAT_R = Region(352, 972, 320, 31, _default_scale)
+ZAAP_COORD_R = Region(1034, 295, 83, 394, _default_scale)
+FARM_R = Region(384, 63, 1158, 815, _default_scale)
+ZAAP_SCROLL_BAR_END_L = Location(1269, 685, _default_scale)
 ZAAP_END_SCROLL_C = QColor(190, 226, 0)
 
 # Patterns
@@ -76,31 +80,31 @@ DOWN = (0, 1)
 
 mapChangeLoc = {
     UP: [
-        Region(877, 29, 142, 12),
-        Region(492, 29, 141, 11),
-        Region(1318, 30, 165, 11)],
+        Region(877, 29, 142, 12, _default_scale),
+        Region(492, 29, 141, 11, _default_scale),
+        Region(1318, 30, 165, 11, _default_scale)],
     LEFT: [
-        Region(335, 349, 14, 126),
-        Region(337, 112, 10, 116),
-        Region(338, 719, 11, 116)],
+        Region(335, 349, 14, 126, _default_scale),
+        Region(337, 112, 10, 116, _default_scale),
+        Region(338, 719, 11, 116, _default_scale)],
     RIGHT: [
-        Region(1576, 360, 7, 125),
-        Region(1572, 53, 11, 98),
-        Region(1572, 752, 12, 100)],
+        Region(1576, 360, 7, 125, _default_scale),
+        Region(1572, 53, 11, 98, _default_scale),
+        Region(1572, 752, 12, 100, _default_scale)],
     DOWN: [
-        Region(898, 901, 137, 12),
-        Region(423, 905, 111, 6),
-        Region(1334, 893, 111, 22)]
+        Region(898, 901, 137, 12, _default_scale),
+        Region(423, 905, 111, 6, _default_scale),
+        Region(1334, 893, 111, 22, _default_scale)]
 }
 
-MY_TURN_CHECK_L = Location(1425, 963)
-END_COMBAT_CLOSE_L = Location(1251, 737)
+MY_TURN_CHECK_L = Location(1425, 963, _default_scale)
+END_COMBAT_CLOSE_L = Location(1251, 737, _default_scale)
 MY_TURN_C = QColor(0, 240, 206, 255)
-RESIGN_BUTTON_LOC = Location(1443, 1006)
-RESIGN_CONFIRM_L = Location(879, 567)
-DEFEAT_POPUP_CLOSE_L = Location(1122, 730)
-CLOSE_DISCONNECTED_BOX_L = Region(866, 549, 205, 42)
-CLOSE_LVL_UP_POPUP_L = Region(336, 573, 46, 32)
+RESIGN_BUTTON_LOC = Location(1443, 1006, _default_scale)
+RESIGN_CONFIRM_L = Location(879, 567, _default_scale)
+DEFEAT_POPUP_CLOSE_L = Location(1122, 730, _default_scale)
+CLOSE_DISCONNECTED_BOX_L = Region(866, 549, 205, 42, _default_scale)
+CLOSE_LVL_UP_POPUP_L = Region(336, 573, 46, 32, _default_scale)
 
 # Shortcuts
 RAPPEL_POTION_SHORTCUT = "e"
@@ -111,7 +115,7 @@ ENU_COLOR = [QColor(253, 242, 206), QColor(253, 190, 45), QColor(254, 249, 226),
 SRAM_COLOR = [QColor(61, 56, 150), QColor(251, 241, 191), QColor(33, 34, 88), QColor(227, 218, 173),
               QColor(34, 51, 153)]
 
-FULL_POD_CHECK_L = Location(1266, 1019)
+FULL_POD_CHECK_L = Location(1266, 1019, _default_scale)
 FULL_POD_COLOR = QColor(53, 190, 96)
 
 
