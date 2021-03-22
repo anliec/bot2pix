@@ -2,6 +2,7 @@ from core.ScaleManager import ScaleManager
 
 from time import sleep, time
 import numpy as np
+import cv2
 import pyautogui
 import gi
 gi.require_version('Gtk', '3.0')
@@ -62,14 +63,13 @@ def move(x, y):
 
 def click(x, y):
     global last_frame, last_frame_origin
-    print("click at: {},{}".format(x, y))
     pyautogui.click(x=(last_frame_origin.x + x), y=(last_frame_origin.y + y))
     last_frame = None
 
 
 def press(key):
     global last_frame
-    pyautogui.press(key)
+    pyautogui.keyDown(key)
     last_frame = None
 
 
@@ -97,6 +97,7 @@ def _capture(region):
                     for j in range(h):
                         b[j, :] = f[r * j:r * j + w * c]
                     last_frame = b.reshape((h, w, c))
+                last_frame = cv2.cvtColor(last_frame, cv2.COLOR_RGB2BGR)
                 last_frame_time = time()
                 ScaleManager().set_win_size(w, h)
                 break
@@ -104,10 +105,11 @@ def _capture(region):
             print("Unable to find Dofus window!")
             return np.zeros(shape=(region.width(), region.height(), 3), dtype=np.uint8)
 
+    if region is None:
+        return last_frame
+
     x, y, w, h = region.getRect()
-
     img = last_frame[y:y+h, x:x+w, :]
-
     return img
 
 

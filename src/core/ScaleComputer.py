@@ -23,7 +23,7 @@ class ScaleComputer:
             # useful for the map coordinate on screen
             new_x = int(x * scale_factor)
             new_y = int((y - original_scale.top_bar_decoration_offset) * scale_factor) + self.top_bar_decoration_offset
-            print(scale_factor, x, y, new_x, new_y)
+            # print(scale_factor, x, y, new_x, new_y)
         else:
             # this point is in the center, fix the offset and scale
             new_x = int(self.center_x + scale_factor * (x - original_scale.center_x))

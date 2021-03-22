@@ -71,22 +71,22 @@ class Bot(threading.Thread):
     @staticmethod
     def parseMapCoords():
         image = env.capture(dofus.MAP_COORDS_R)
-        # cv2.imshow("coord", image)
-        # cv2.waitKey()
         gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-        low_bound = np.array([160, 60, 0])
+        low_bound = np.array([224, 224, 224])
         upper_bound = np.array([255, 255, 255])
 
-        bgr_img = cv2.cvtColor(image, cv2.COLOR_RGB2BGR)
-        mask = cv2.inRange(bgr_img, low_bound, upper_bound)
+        mask = cv2.inRange(image, low_bound, upper_bound)
         result = cv2.bitwise_and(gray, gray, mask=mask)
         result = cv2.threshold(result, 0, 255, cv2.THRESH_BINARY_INV)[1]
         newShape = (int(dofus.MAP_COORDS_R.width() * 10), int(dofus.MAP_COORDS_R.height() * 10))
         result = cv2.resize(result, newShape)
         result = cv2.blur(result, (7, 7))
-        text = pytesseract.image_to_string(result, config='--psm 6')
+        text = pytesseract.image_to_string(result, config='--psm 6', lang='fra')
 
+        # cv2.imshow("coord_bin", cv2.resize(result, (int(dofus.MAP_COORDS_R.width()), int(dofus.MAP_COORDS_R.height()))))
+        # cv2.imshow("coord", image)
         # print(text)
+        # cv2.waitKey()
         res = re.findall("(-?\d+)", text)
         if res:
             return int(res[0]), int(res[1])

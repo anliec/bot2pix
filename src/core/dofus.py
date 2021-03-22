@@ -166,3 +166,19 @@ def findObject(color):
         result = ObjType.DARK
 
     return result
+
+
+if __name__ == '__main__':
+    import cv2
+    from core.ScaleManager import ScaleManager
+
+    def region_drawer(img, r: Region):
+        cv2.rectangle(img, (r.x(), r.y()), (r.x() + r.width(), r.y() + r.height()), (0, 255, 0), 3)
+
+    full_image = cv2.imread("/home/nicolas/Pictures/Screenshot_20210321_092431.png")
+    h, w, c = full_image.shape
+    print(full_image.shape)
+    ScaleManager().set_win_size(w, h)
+    region_drawer(full_image, PA_R)
+    cv2.imshow("region", full_image)
+    cv2.waitKey()

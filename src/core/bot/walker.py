@@ -18,12 +18,12 @@ from core.bot import Bot
 
 class Walker(Bot):
 
-    def __init__(self, workdir, name="Dofus"):
+    def __init__(self, workdir, name="Dofus", zone=None):
         super(Walker, self).__init__(workdir, name=name)
         self.currPos = None
         self.lastPos = None
         self.tmpIgnore = []
-        self.zone = None
+        self.zone = zone
         self.startZaap = None
         self.memoTime = 60 * 15
 
@@ -45,11 +45,11 @@ class Walker(Bot):
             random.shuffle(directionLocs)
             for tgt in directionLocs:
                 with self.lock:
-                    pyautogui.keyDown('shift')
+                    env.press('shift')
                     sleep(0.1)
                     tgt.click()
                     sleep(0.1)
-                    pyautogui.keyUp('shift')
+                    env.release('shift')
                     dofus.OUT_OF_COMBAT_R.hover()
                 if self.waitMapChange(dstx, dsty, self.mapChangeTimeOut):
                     self.lastPos = (currx, curry)

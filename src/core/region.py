@@ -187,7 +187,6 @@ class Region(QRect):
         while perf_counter() - s < interval:
             yield cv2.cvtColor(env.capture(self), cv2.COLOR_RGB2GRAY)
 
-
     def findAll(self, pattern, threshold=0.7, grayscale=True, capture=True):
         matches = []
         if capture:

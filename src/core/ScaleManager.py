@@ -26,4 +26,10 @@ class ScaleManager:
             for o in self.registered_objects:
                 o.rescale(self.current_scale)
 
+    def get_win_w(self):
+        return self.current_win_width
+
+    def get_win_h(self):
+        return self.current_win_height
+
 
