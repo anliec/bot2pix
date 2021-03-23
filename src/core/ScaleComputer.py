@@ -1,7 +1,7 @@
 
 
 class ScaleComputer:
-    def __init__(self, win_width, win_height, top_bar_decoration_offset=0):
+    def __init__(self, win_width, win_height, top_bar_decoration_offset=31):
         self.win_width = win_width
         self.win_height = win_height
         self.top_bar_decoration_offset = top_bar_decoration_offset

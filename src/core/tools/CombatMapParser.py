@@ -44,6 +44,7 @@ class CombatMapParser:
     def parse_map(self, img=None, is_placement_stage=False):
         if img is None:
             img = env.capture(dofus.COMBAT_R)
+        cv2.imwrite("/tmp/dot_noPr.png", img)
         map_dict = {}
         team_red = []
         team_blue = []
@@ -90,8 +91,11 @@ class CombatMapParser:
                     cv2.circle(img, (pix_x, pix_y), 20, (0, 255, 255), 1)
                     colors[c] += 1
                     map_dict[(x, y)] = WALKABLE_CELL_ID
-        print(len(colors), sum(colors.values()))
-        print(sorted(colors.items(), key=lambda x: -x[1]))
+        # print(len(colors), sum(colors.values()))
+        # print(sorted(colors.items(), key=lambda x: -x[1]))
+        # cv2.imshow("dot", img)
+        cv2.imwrite("/tmp/dot.png", img)
+        # cv2.waitKey(1)
         player_info = {"red": team_red,
                        "blue": team_blue}
         if is_placement_stage:
@@ -121,10 +125,12 @@ class CombatMapParser:
         crop = self.cell_coordinate_manager.crop_img_at_coord(img, pix_x, pix_y, mask_color=(0, 0, 0))
         if crop.shape[0] == 0 or crop.shape[1] == 0:
             return False, ""
-        if self.count_pixel_of_color(crop, COLOR_BOONES_RED_CIRCLE) > 60:
+        if np.sum(crop[:, :, 2] == 255) > 60:
+                # self.count_pixel_of_color(crop, COLOR_BOONES_RED_CIRCLE) > 60:
             # cv2.imshow("red {} {}".format(pix_x, pix_y), crop)
             return True, "red"
-        elif self.count_pixel_of_color(crop, COLOR_BOONES_BLUE_CIRCLE) > 60:
+        elif np.sum(crop[:, :, 0] == 255) > 60:
+            # self.count_pixel_of_color(crop, COLOR_BOONES_BLUE_CIRCLE) > 60:
             # cv2.imshow("blue {} {}".format(pix_x, pix_y), crop)
             return True, "blue"
         else:

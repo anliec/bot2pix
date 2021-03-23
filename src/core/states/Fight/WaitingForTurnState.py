@@ -1,26 +1,29 @@
 from core.states.BaseState import BaseState
+from core.tools.CombatManager import is_ready_button_visible, is_ready_button_enabled
 from core import dofus
 
 import numpy as np
+import time
 
 COUNT_DOWN_TIMER_COLOR = np.array((0, 200, 252))
-READY_BUTTON_ACTIVE = np.array((0, 240, 206))
-READY_BUTTON_DISABLED = np.array((0, 143, 124))
 
 
-class WaintingForTurnState(BaseState):
+class WaitingForTurnState(BaseState):
     def __init__(self, machine):
         super().__init__(machine)
 
     def update(self):
         my_turn_check_im = dofus.MY_TURN_CHECK_R.capture()
         if (my_turn_check_im == COUNT_DOWN_TIMER_COLOR).any():
+            print("Timer is visible, time to fight!")
             self.change_state("PlayingTurn")
-
-        end_turn_button = dofus.READY_R.capture()
-        if not ((end_turn_button == READY_BUTTON_ACTIVE).any() or (end_turn_button == READY_BUTTON_DISABLED).any()):
-            # It look like the fight ended as the ready / end turn button is not here anymore
+        elif is_ready_button_enabled():
+            print("Button enabled, time to fight!")
+            self.change_state("PlayingTurn")
+        elif not is_ready_button_visible():
             self.change_state("FightEnd")
+        else:
+            time.sleep(0.5)
 
 
 

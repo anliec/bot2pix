@@ -18,11 +18,11 @@ class ScaleManager:
     def register(self, scaled_object):
         self.registered_objects.append(scaled_object)
 
-    def set_win_size(self, w, h):
+    def set_win_size(self, w, h, top_bar_decoration_offset=0):
         if self.current_win_width != w and self.current_win_height != h:
             self.current_win_width = w
             self.current_win_height = h
-            self.current_scale = ScaleComputer(w, h)
+            self.current_scale = ScaleComputer(w, h, top_bar_decoration_offset)
             for o in self.registered_objects:
                 o.rescale(self.current_scale)
 

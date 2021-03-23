@@ -13,6 +13,7 @@ if sys.platform == 'win32' or sys.platform == 'cygwin':
     press = env.press
     release = env.release
     scroll = env.scroll
+    force_frame = env.force_frame
 elif sys.platform == 'linux':
     import core.env_linux as env
 
@@ -24,6 +25,7 @@ elif sys.platform == 'linux':
     press = env.press
     release = env.release
     scroll = env.scroll
+    force_frame = env.force_frame
 
 
 if __name__ == "__main__":

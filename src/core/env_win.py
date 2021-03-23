@@ -16,6 +16,8 @@ IDE_HWND = None
 DOFUS_HWND = None
 last_dc = None
 
+forced_frame = None
+
 keycodes = {
     "z": 0x5A,
     "space": win32con.VK_SPACE
@@ -70,6 +72,10 @@ def release(key):
 
 
 def _capture(region):
+    global forced_frame
+    if forced_frame is not None:
+        x, y, w, h = region.getRect()
+        return forced_frame[y:y + h, x:x + w, :]
     x, y, w, h = region.getRect()
     # hwnd = pywinauto.findwindows.find_windows(title_re=".*Dofus.*")[0]
     hdcwin = win32gui.GetWindowDC(DOFUS_HWND)
@@ -92,6 +98,11 @@ def _capture(region):
     dcObj.DeleteDC()
     win32gui.ReleaseDC(DOFUS_HWND, hdcwin)
     return img
+
+
+def force_frame(frame):
+    global forced_frame
+    forced_frame = frame
 
 
 def scroll(clicks=0, delta_x=0, delta_y=0, delay_between_ticks=0):

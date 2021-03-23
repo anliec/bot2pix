@@ -2,6 +2,7 @@ from core.states.BaseState import BaseState
 from core import env, dofus, Map
 from core.tools.CombatMapParser import CombatMapParser
 from core.ScaleManager import ScaleManager
+from core.tools.CombatManager import is_ready_button_disabled
 
 import numpy as np
 import time
@@ -19,20 +20,28 @@ class PositionSelectionState(BaseState):
         self.map_parser = CombatMapParser()
 
     def update(self):
+        if is_ready_button_disabled():
+            # Look like we were not ready on time, get ready to fight!
+            self.change_state("WaitingForTurn")
         is_boone_img = dofus.CREATURE_MODE_R.capture()
         if not (is_boone_img == IS_BOONE_MODE_COLOR).any():
             # We are not in boone mode, fix that and wait a bit to apply
+            print("Boone not selected, enabling boon mode")
             dofus.CREATURE_MODE_R.click()
             time.sleep(1)
+            return
         map_obj, player_info = self.map_parser.parse_map(is_placement_stage=True)
         starting_pos = self.get_best_starting_pos(map_obj, player_info)
         if map_obj.is_tile_walkable(starting_pos):
+            print("Changing position to {}".format(starting_pos))
             self.map_parser.click_on_tile(starting_pos)
+            time.sleep(1)
         else:
             # Lets assume that it's because we are already there for now...
+            print("Someone is already at {}, we are ready!".format(starting_pos))
             dofus.READY_R.click()
             time.sleep(1)
-            self.machine.change_state("WaitingForTurn")
+            self.change_state("WaitingForTurn")
 
     def get_best_starting_pos(self, map_obj:Map.Map, player_info):
         blue_players = player_info["blue"]

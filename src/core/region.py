@@ -110,6 +110,9 @@ class Region(QRect):
             # if we had a capture, update it to the new scale
             self.capture(gray=not (len(self.bi.shape) == 3 and self.bi.shape[2] == 3))
 
+    def area(self):
+        return self.width() * self.height()
+
     @withTimeOut
     def waitAppear(self, pattern, threshold=0.7):
         self.stopWait.clear()

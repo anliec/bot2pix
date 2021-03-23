@@ -10,6 +10,7 @@ class FightEndState(BaseState):
 
     def update(self):
         # close UI
+        print("Fight ended")
         env.press("enter")
         time.sleep(0.1)
         env.release("enter")

@@ -1,8 +1,8 @@
 from core.states.BaseState import BaseState
-from core.states.Fight.WaitingForTurnState import READY_BUTTON_DISABLED, READY_BUTTON_ACTIVE
 from core import env, dofus, Map
 from core.tools.CombatMapParser import CombatMapParser
 from core.tools.MapManager import is_tile_visible, find_shortest_path
+from core.tools.CombatManager import is_ready_button_disabled, is_ready_button_visible
 from core.ScaleManager import ScaleManager
 from core.tools.CombatStatsParser import read_pa, read_pm
 from core.player.Player import Player
@@ -18,12 +18,13 @@ class PlayingTurnState(BaseState):
 
     def update(self):
         # first check that it's still our turn
-        end_turn_button = dofus.READY_R.capture()
-        if (end_turn_button == READY_BUTTON_DISABLED).any():
+        if is_ready_button_disabled():
+            print("Time probably run out, our turn is finished")
             self.change_state("WaitingForTurn")
             return
-        elif not ((end_turn_button == READY_BUTTON_ACTIVE).any() or (end_turn_button == READY_BUTTON_DISABLED).any()):
+        elif not is_ready_button_visible():
             # It look like the fight ended as the ready / end turn button is not here anymore
+            print("Fight ended, victory?")
             self.change_state("FightEnd")
             return
         map_obj, player_info = self.map_parser.parse_map(is_placement_stage=False)

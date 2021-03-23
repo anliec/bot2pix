@@ -12,10 +12,13 @@ class FightState(BaseState):
         self.sub_state_machine.change_state("PositionSelection")
 
     def update(self):
-        pass
+        self.sub_state_machine.update()
 
     def on_exit(self):
         self.sub_state_machine.change_state("Disabled")
 
     def on_combat_ended(self):
         self.change_state("WaitingForFight")
+
+
+

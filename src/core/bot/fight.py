@@ -7,7 +7,7 @@ from core.bot import Walker
 from core.exceptions import *
 from core.grid import Grid
 import logging
-pyautogui.FAILSAFE = False
+# pyautogui.FAILSAFE = False
 
 
 class CombatStartObs(threading.Thread):
