@@ -9,25 +9,30 @@ import unittest
 def read_pa():
     pa_image = dofus.PA_R.capture()
     h, w, c = pa_image.shape
-    blue = cv2.threshold(pa_image[:, :, 0], thresh=200, maxval=255, type=cv2.THRESH_BINARY_INV)[1]
-    thresh = blue
+    thresh = cv2.threshold(pa_image[:, :, 2], thresh=200, maxval=255, type=cv2.THRESH_BINARY_INV)[1]
     thresh = cv2.resize(thresh, (w * 10, h * 10))
     thresh = cv2.blur(thresh, (7, 7))
     text = pytesseract.image_to_string(thresh, config='--psm 6', lang='fra')
     res = re.findall("(\d+)", text)
-    assert len(res) > 0
+    print("pa:", text)
+    if len(res) == 0:
+        cv2.imwrite("/tmp/pa_img.png", pa_image)
+        cv2.imwrite("/tmp/pa_thresh.png", thresh)
+        return 0
     return int(res[0])
 
 
 def read_pm():
     pm_image = dofus.PM_R.capture()
     h, w, c = pm_image.shape
-    thresh = cv2.threshold(pm_image[:, :, 0], thresh=200, maxval=255, type=cv2.THRESH_BINARY_INV)[1]
+    thresh = cv2.threshold(pm_image[:, :, 2], thresh=200, maxval=255, type=cv2.THRESH_BINARY_INV)[1]
     thresh = cv2.resize(thresh, (w * 10, h * 10))
     thresh = cv2.blur(thresh, (7, 7))
     text = pytesseract.image_to_string(thresh, config='--psm 6', lang='fra')
     res = re.findall("(\d+)", text)
-    assert len(res) > 0
+    print("pm:", text)
+    if len(res) == 0:
+        return 0
     return int(res[0])
 
 

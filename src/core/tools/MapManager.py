@@ -15,6 +15,8 @@ def is_tile_visible(map_object: Map, a, b):
     start = a.astype(np.float64) + 0.5
     current_bound = a + np.fmax(i, [0, 0])
     current_pos = a.copy()
+    # ignore divide by zero here
+    old_setting = np.seterr(divide='ignore')
     while True:
         # print("bound", current_bound)
         # print("pos", current_pos)
@@ -33,13 +35,17 @@ def is_tile_visible(map_object: Map, a, b):
 
         if (current_pos == target).all():
             # We have reach the target without seeing any obstacle
+            # reset np settings
+            np.seterr(**old_setting)
             return True
         elif map_object.is_tile_blocking_view(tuple(current_pos)):
             # We are not at the target yet but are on an obstacle
-            print()
-            print("{} is blocking the view ({})".format(current_pos,
-                                                        map_object.get_tile(tuple(current_pos))))
-            print(current_bound, a, b, i, p)
+            # print()
+            # print("{} is blocking the view ({})".format(current_pos,
+            #                                             map_object.get_tile(tuple(current_pos))))
+            # print(current_bound, a, b, i, p)
+            # reset np settings
+            np.seterr(**old_setting)
             return False
 
 
@@ -77,7 +83,7 @@ def find_shortest_path(map_object: Map, start_pos: np.ndarray, dest_pos: np.ndar
 class TestMapManagerMethods(unittest.TestCase):
 
     def test_is_tile_visible_close(self):
-        map_object = Map()
+        map_object = Map({})
         map_object.map_from_array([[2, 2, 2, 2, 2, 2, 4],
                                    [0, 0, 0, 2, 2, 2, 2],
                                    [2, 4, 2, 2, 2, 2, 2],
@@ -110,7 +116,7 @@ class TestMapManagerMethods(unittest.TestCase):
                                         b=(2, 4)))
 
     def test_is_tile_visible_far(self):
-        map_object = Map()
+        map_object = Map({})
         map_object.map_from_array([[2, 2, 2, 2, 2, 2, 4],
                                    [0, 0, 0, 2, 2, 2, 2],
                                    [2, 4, 2, 2, 2, 2, 2],
@@ -144,7 +150,7 @@ class TestMapManagerMethods(unittest.TestCase):
                                         b=(6, 0)))
 
     def test_is_tile_far_easy(self):
-        map_object = Map()
+        map_object = Map({})
         map_object.map_from_array([[2, 2, 2, 2, 2, 2, 4],
                                    [0, 0, 0, 2, 2, 2, 2],
                                    [2, 4, 2, 2, 2, 2, 2],
@@ -178,7 +184,7 @@ class TestMapManagerMethods(unittest.TestCase):
                                          b=(6, 6)))
 
     def test_is_tile_far_tricky(self):
-        map_object = Map()
+        map_object = Map({})
         map_object.map_from_array([[2, 2, 2, 2, 2, 2, 4],
                                    [0, 0, 0, 2, 2, 2, 2],
                                    [2, 4, 2, 2, 2, 2, 2],
@@ -216,7 +222,7 @@ class TestMapManagerMethods(unittest.TestCase):
                                          b=(6, 3)))
 
     def test_find_shortest_path(self):
-        map_object = Map()
+        map_object = Map({})
         map_object.map_from_array([[2, 2, 2, 2, 2, 2, 4],
                                    [0, 0, 0, 2, 2, 2, 2],
                                    [2, 2, 2, 2, 2, 2, 2],

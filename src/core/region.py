@@ -181,8 +181,6 @@ class Region(QRect):
         self.bi = env.capture(self)
         if gray:
             self.bi = cv2.cvtColor(self.bi, cv2.COLOR_RGB2GRAY)
-        else:
-            self.bi = cv2.cvtColor(self.bi, cv2.COLOR_RGB2BGR)
         return self.bi
 
     def stream(self, interval=FOREVER):

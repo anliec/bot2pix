@@ -25,7 +25,16 @@ def main():
     attaque_naturelle.min_range = 1
     attaque_naturelle.need_visibility = True
     attaque_naturelle.key_shortcut = ['2']
-    Player().attacks = [attaque_naturelle]
+
+    torpeur = Attack()
+    torpeur.name = "Torpeur"
+    torpeur.pa_cost = 3
+    torpeur.max_range = 3
+    torpeur.min_range = 1
+    torpeur.need_visibility = True
+    torpeur.key_shortcut = ['3']
+
+    Player().attacks = [torpeur, attaque_naturelle]
     bot = MachineBot("Pif-Protect")
 
     bot.run()

@@ -23,6 +23,7 @@ class WaitingForTurnState(BaseState):
         elif not is_ready_button_visible():
             self.change_state("FightEnd")
         else:
+            dofus.MY_TURN_CHECK_R.hover()
             time.sleep(0.5)
 
 
