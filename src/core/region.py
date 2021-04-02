@@ -235,8 +235,11 @@ class Region(QRect):
         self.overlay.highlight(self, secs)
         app.exec_()
 
-    def click(self):
-        env.click(self.center().x(), self.center().y())
+    def click(self, x=None, y=None):
+        if x is None or y is None:
+            env.click(self.center().x(), self.center().y())
+        else:
+            env.click(self.x() + x, self.y() + y)
 
     def getpixel(self, x, y):
         return tuple(self.bi[y, x])

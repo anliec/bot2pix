@@ -18,7 +18,7 @@ class FightState(BaseState):
         self.sub_state_machine.change_state("Disabled")
 
     def on_combat_ended(self):
-        self.change_state("WaitingForFight")
+        self.change_state("FindFight")
 
 
 

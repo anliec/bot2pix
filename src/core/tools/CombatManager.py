@@ -11,7 +11,7 @@ READY_BUTTON_DISABLED = np.array((0, 143, 124))
 def is_ready_button_enabled():
     end_turn_button = dofus.READY_R.capture()
     c = np.sum(np.linalg.norm(end_turn_button - READY_BUTTON_ACTIVE, ord=1, axis=2) < 50)
-    print("Ready button enabled count:", c)
+    # print("Ready button enabled count:", c)
     # import cv2
     # cv2.imshow("button", end_turn_button)
     # cv2.waitKey()
@@ -21,7 +21,7 @@ def is_ready_button_enabled():
 def is_ready_button_disabled():
     end_turn_button = dofus.READY_R.capture()
     c = np.sum(np.linalg.norm(end_turn_button - READY_BUTTON_DISABLED, ord=1, axis=2) < 50)
-    print("Ready button disabled count:", c)
+    # print("Ready button disabled count:", c)
     return c > (dofus.READY_R.area() / 10)
 
 
